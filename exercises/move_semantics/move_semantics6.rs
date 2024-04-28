@@ -5,24 +5,24 @@
 // Execute `rustlings hint move_semantics6` or use the `hint` watch subcommand
 // for a hint.
 
-// I AM NOT DONE
 
 fn main() {
     let data = "Rust is great!".to_string();
 
-    get_char(data);
+    let last_char = get_char(&data); // 传递对字符串的引用
 
-    string_uppercase(&data);
+    println!("Last character: {}", last_char);
+
+    string_uppercase(data); // 传递字符串的所有权
 }
 
-// Should not take ownership
-fn get_char(data: String) -> char {
-    data.chars().last().unwrap()
+// 不应该获取所有权
+fn get_char(data: &String) -> char {
+    data.chars().last().expect("Empty string")
 }
 
-// Should take ownership
-fn string_uppercase(mut data: &String) {
-    data = &data.to_uppercase();
-
-    println!("{}", data);
+// 应该获取所有权
+fn string_uppercase(data: String) {
+    let uppercased = data.to_uppercase(); // 将字符串转换为大写
+    println!("{}", uppercased);
 }

@@ -2,7 +2,7 @@
 	heap
 	This question requires you to implement a binary heap function
 */
-// I AM NOT DONE
+
 
 use std::cmp::Ord;
 use std::default::Default;
@@ -37,7 +37,15 @@ where
     }
 
     pub fn add(&mut self, value: T) {
-        //TODO
+        self.items.push(value);
+        self.count += 1;
+        let mut idx = self.items.len() - 1;
+        let mut nxt = idx / 2;
+        while nxt > 0 && (self.comparator)(&self.items[idx], &self.items[nxt]) {
+            self.items.swap(nxt, idx);
+            idx = nxt;
+            nxt = nxt / 2;
+        }
     }
 
     fn parent_idx(&self, idx: usize) -> usize {
@@ -84,8 +92,37 @@ where
     type Item = T;
 
     fn next(&mut self) -> Option<T> {
-        //TODO
-		None
+        if self.is_empty() {
+            None
+        } else if self.len() == 1 {
+            self.count -= 1;
+            self.items.pop()
+        } else {
+            let ed = self.len();
+            self.items.swap(1, ed);
+            self.count -= 1;
+            let ans = self.items.pop();
+
+            let mut idx = 1usize;
+            while idx < self.items.len() {
+                let left = idx * 2;
+                let right = left + 1;
+                let mut nxt = idx;
+                if left < self.items.len() && (self.comparator)(&self.items[left], &self.items[nxt]) {
+                    nxt = left;
+                }
+                if right < self.items.len() && (self.comparator)(&self.items[right], &self.items[nxt]) {
+                    nxt = right;
+                }
+                if idx != nxt {
+                    self.items.swap(idx, nxt);
+                    idx = nxt;
+                } else {
+                    break;
+                }
+            }
+            ans
+        }
     }
 }
 
